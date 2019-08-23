@@ -34,37 +34,43 @@ class App extends Component {
   // Arrow fx for binding
   handleCardClick = index => {
     const { currentPair } = this.state
-
+    
+    // Deux cartes ont déjà été sélectionnées
     if (currentPair.length === 2) {
+      // On n'appelle pas la fonction "handleNewPairClosedBy"
       return
     } 
-
+    
+    // Aucune carte n'a déjà été sélectionnée
     if (currentPair.length === 0) {
+      // On met à jour la variable "currentPair" avec la 1ère carte sélectionnée
       this.setState({ currentPair: [index] })
+      // On n'appelle pas la fonction "handleNewPairClosedBy"
       return
     }
-
+    
+    // Une 2ème carte est sélectionnée
     this.handleNewPairClosedBy(index)
   }
 
   getFeedbackForCard(index) {
     // On récupère la paire courante, et la liste des cartes retournées
     const { currentPair, matchedCardIndices } = this.state // destructuring 
-    // Variable indiquant si la carte courante fait partie des cartes retournées
+    // Boolean : la carte fait partie des cartes retournées
     const indexMatched = matchedCardIndices.includes(index)
   
     // Si elle est la seule carte sélectionnée 
-    if (currentPair.length < 2) {
+    if (currentPair.length === 1) {
       // si elle a déjà été retournée ou bien son index correspond à la seule carte sélectionnée
       return indexMatched || index === currentPair[0] ? 'visible' : 'hidden'
     }
     
-    // Sinon si (deux cartes ont été sélectionnées et que) la carte fait partie de la paire
+    // Sinon si deux cartes ont été sélectionnées, on regarde si elles ont font parti d'une paire gagnante ou non
     if (currentPair.includes(index)) {
       return indexMatched ? 'justMatched' : 'justMismatched'
     }
     
-    // Sinon...
+    // Sinon si la carte a été "trouvée", on les affiche par défaut
     return indexMatched ? 'visible' : 'hidden'
   }
 
