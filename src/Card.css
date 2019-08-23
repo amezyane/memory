@@ -1,6 +1,8 @@
 .memory > .card {
-  font-size: 2em;
-  flex: 1 1 calc(100% / 6 - 0.4em);
+  font-size: 1.8em;
+  flex-grow: 2;
+  flex-shrink: 2;
+  flex-basis: calc(100% / 5 - 0.8em);
   outline: 0.08em solid silver;
   margin: 0.2em;
   display: flex;
