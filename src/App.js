@@ -5,6 +5,7 @@ import './App.css'
 
 import Card from './Card'
 import GuessCount from './GuessCount'
+import HighScoreInput from './HighScoreInput'
 
 import HallOfFame, { FAKE_HOF } from './HallOfFame'
 
@@ -17,6 +18,7 @@ class App extends Component {
     cards: this.generateCards(),
     currentPair: [], // tableau représentant la paire en cours de sélection par la joueuse. À vide, aucune sélection en cours. Un élément signifie qu’une première carte a été retournée. Deux éléments signifient qu’on a retourné une seconde carte, ce qui déclenchera une analyse de la paire et l’avancée éventuelle de la partie.
     guesses: 0, // nombre de tentatives de la partie en cours (nombre de paires tentées, pas nombre de clics)
+    hallOfFame: null, // Liste des scores
     matchedCardIndices: [], //  liste les positions des cartes appartenant aux paires déjà réussies, et donc visibles de façon permanente.
   }
 
@@ -87,8 +89,13 @@ class App extends Component {
     setTimeout(() => this.setState({ currentPair: [] }), VISUAL_PAUSE_MSECS)
   }
 
+  // Arrow fx for binding
+  displayHallOfFame = (hallOfFame) => {
+    this.setState({ hallOfFame })
+  }
+
   render() {
-    const { cards, guesses, matchedCardIndices } = this.state
+    const { cards, guesses, hallOfFame, matchedCardIndices } = this.state
     const won = matchedCardIndices.length === cards.length
     return (
       <div className="memory">
@@ -102,7 +109,14 @@ class App extends Component {
             onClick={this.handleCardClick}
           />
         ))}
-        {won && <HallOfFame entries={FAKE_HOF} />}
+        {
+          won &&
+           (hallOfFame ? (
+            <HallOfFame entries={hallOfFame} />
+           ) : (
+            <HighScoreInput guesses={guesses} onStored={this.displayHallOfFame} />
+           ))
+        }
       </div>
     )
   }
